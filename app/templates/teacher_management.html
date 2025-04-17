@@ -1,0 +1,55 @@
+<!-- app/templates/teacher_management.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>老师管理</title>
+</head>
+<body>
+    <h1>老师管理</h1>
+    <p><a href="{{ url_for('main.add_teacher') }}">添加新老师</a></p>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>老师用户名</th>
+                <th>老师邮箱</th>
+                <th>教授的模块</th>  <!-- 新增：显示老师教授的模块 -->
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for teacher in teachers %}
+            <tr>
+                <td>{{ teacher.username }}</td>
+                <td>{{ teacher.email }}</td>
+                <td>
+                    <!-- 显示该老师教授的模块 -->
+                    <ul>
+                    {% for course in teacher.courses %}
+                        <li>
+                            <strong>{{ course.name }}</strong>:
+                            <ul>
+                                {% for module in course.modules %}
+                                    <li>{{ module.name }}</li>  <!-- 显示模块名称 -->
+                                {% endfor %}
+                            </ul>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <a href="{{ url_for('main.edit_teacher', teacher_id=teacher.id) }}">编辑</a>
+                    <form action="{{ url_for('main.delete_teacher', teacher_id=teacher.id) }}" method="POST" style="display:inline;">
+                        <button type="submit">删除</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p><a href="{{ url_for('main.admin_dashboard') }}">返回管理员首页</a></p>  <!-- 添加返回管理员首页的链接 -->
+</body>
+</html>

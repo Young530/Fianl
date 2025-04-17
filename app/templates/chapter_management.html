@@ -1,0 +1,29 @@
+<!-- app/templates/chapter_management.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>章节管理 - {{ module.name }}</title>
+</head>
+<body>
+    <h1>章节管理 - {{ module.name }}</h1>
+
+    <form method="POST">
+        <div>
+            <label for="name">章节名称:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <button type="submit">添加章节</button>
+    </form>
+
+    <h2>现有章节：</h2>
+    <ul>
+        {% for chapter in chapters %}
+        <li>{{ chapter.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <p><a href="{{ url_for('main.module_management', course_id=module.course.id) }}">返回模块管理</a></p>
+</body>
+</html>

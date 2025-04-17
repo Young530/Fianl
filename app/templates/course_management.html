@@ -1,0 +1,42 @@
+<!-- app/templates/course_management.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课程管理</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>课程管理</h1>
+        {% if current_user.role == 'admin' %}
+            <p>作为管理员，您可以管理所有课程。</p>
+        {% elif current_user.role == 'teacher' %}
+            <p>作为老师，您只能管理自己教授的课程。</p>
+        {% endif %}
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>课程名称</th>
+                    <th>课程描述</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                <tr>
+                    <td>{{ course.name }}</td>
+                    <td>{{ course.description }}</td>
+                    <td>
+                        <a href="{{ url_for('main.edit_course', course_id=course.id) }}">编辑</a>
+                        <a href="{{ url_for('main.delete_course', course_id=course.id) }}" onclick="return confirm('确定删除吗？')">删除</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!-- app/templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>欢迎页面</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>欢迎来到学习平台</h1>
+        <p>本平台提供课程学习、题目演练、学习报告等功能。</p>
+        <p><a href="/login">点击登录</a></p>
+    </div>
+</body>
+</html>

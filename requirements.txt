@@ -1,0 +1,6 @@
+flask~=3.0.3
+flask-login~=0.6.3
+flask-migrate~=4.1.0
+alembic~=1.15.2
+sqlalchemy~=2.0.34
+werkzeug~=3.0.3

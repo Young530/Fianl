@@ -1,0 +1,26 @@
+<!-- app/templates/add_course.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加课程</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>添加课程</h1>
+        <form method="POST">
+            <div class="form-group">
+                <label for="name">课程名称:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="description">课程描述:</label>
+                <textarea id="description" name="description" required></textarea>
+            </div>
+            <button type="submit">添加课程</button>
+        </form>
+    </div>
+</body>
+</html>

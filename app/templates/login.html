@@ -1,0 +1,28 @@
+<!-- app/templates/login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+</head>
+<body>
+    <h1>登录</h1>
+    <form method="POST">
+        <div>
+            <label for="username">用户名:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div>
+            <label for="password">密码:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit">提交</button>
+    </form>
+
+    <!-- 如果有 next 参数，将它添加到登录表单中 -->
+    <input type="hidden" name="next" value="{{ request.args.get('next') }}">
+
+    <p><a href="/">返回主页</a></p>
+</body>
+</html>

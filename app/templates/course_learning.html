@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ course.name }} - {{ chapter.name }}</title>
+</head>
+<body>
+
+<h2>{{ course.name }} - {{ chapter.name }}</h2>
+
+<!-- 视频播放 -->
+{% for video in videos %}
+    <h3>{{ video.title }}</h3>
+    <video width="600" controls>
+        <source src="{{ video.url }}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <hr>
+{% endfor %}
+
+<!-- 评论区 -->
+<h3>评论区</h3>
+<form method="POST">
+    <textarea name="comment" placeholder="输入你的评论..."></textarea>
+    <button type="submit">提交评论</button>
+</form>
+
+<ul>
+    {% for comment in comments %}
+        <li><strong>{{ comment.user.username }}</strong>: {{ comment.content }}</li>
+    {% endfor %}
+</ul>
+
+<!-- 题目演练 -->
+<h3>题目演练</h3>
+<form method="POST">
+    {% for question in questions %}
+        <div>
+            <p>{{ question.question_text }}</p>
+            <input type="text" name="question_answer" placeholder="输入答案...">
+        </div>
+    {% endfor %}
+    <button type="submit">提交答案</button>
+</form>
+
+<!-- 学习进度 -->
+{% if chapter_completed %}
+    <p>该章节已完成！</p>
+{% else %}
+    <p>章节进度: 0%</p>
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!-- app/templates/admin_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员功能</title>
+</head>
+<body>
+    <h1>管理员功能页面</h1>
+    <p>欢迎回来，{{ current_user.username }}！</p>
+  <ul>
+    <li><a href="{{ url_for('main.admin_course_management') }}">课程管理</a></li>
+    <li><a href="{{ url_for('main.student_management') }}">学生管理</a></li>
+    <li><a href="{{ url_for('main.teacher_management') }}">老师管理</a></li>
+    <li><a href="{{ url_for('main.exercise_management') }}">题目管理</a></li>
+    <li><a href="{{ url_for('main.question_management') }}">提问管理</a></li>
+    <li><a href="{{ url_for('main.student_progress') }}">学生学习进度与报告查看</a></li>
+</ul>
+</body>
+</html>

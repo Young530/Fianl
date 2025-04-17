@@ -1,0 +1,18 @@
+<!-- app/templates/student_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生功能</title>
+</head>
+<body>
+    <h1>学生功能页面</h1>
+    <p>欢迎回来，{{ current_user.username }}！</p>
+    <ul>
+        <li><a href="/course_learning">课程学习</a></li>
+        <li><a href="/exercise">题目演练</a></li>
+        <li><a href="/learning_report">学习报告</a></li>
+    </ul>
+</body>
+</html>

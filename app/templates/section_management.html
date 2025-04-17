@@ -1,0 +1,29 @@
+<!-- app/templates/section_management.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小节管理 - {{ chapter.name }}</title>
+</head>
+<body>
+    <h1>小节管理 - {{ chapter.name }}</h1>
+
+    <form method="POST">
+        <div>
+            <label for="name">小节名称:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <button type="submit">添加小节</button>
+    </form>
+
+    <h2>现有小节：</h2>
+    <ul>
+        {% for section in sections %}
+        <li>{{ section.name }}</li>
+        {% endfor %}
+    </ul>
+
+    <p><a href="{{ url_for('main.chapter_management', module_id=chapter.module.id) }}">返回章节管理</a></p>
+</body>
+</html>
