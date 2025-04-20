@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify, session, flash
 from app.models import db, User, Course, Module, Chapter, Section, Video, Comment, Progress ,Question ,QuestionSubmission
 from flask_login import login_required ,current_user ,login_user
 from werkzeug.security import generate_password_hash
@@ -373,6 +373,160 @@ def course_management():
 
 
 #########课程管理页面
+# 获取课程列表
+@bp.route('/api/courses', methods=['GET'])
+@login_required
+def get_courses():
+    courses = Course.query.all()
+    return jsonify([course.to_dict() for course in courses])
+
+# 获取某个课程的所有模块
+@bp.route('/api/courses/<int:course_id>/modules', methods=['GET'])
+@login_required
+def get_modules(course_id):
+    course = Course.query.get_or_404(course_id)
+    modules = course.modules
+    return jsonify([module.to_dict() for module in modules])
+
+# 获取模块的所有章节
+@bp.route('/api/modules/<int:module_id>/chapters', methods=['GET'])
+@login_required
+def get_chapters(module_id):
+    module = Module.query.get_or_404(module_id)
+    chapters = module.chapters
+    return jsonify([chapter.to_dict() for chapter in chapters])
+
+# 获取章节的所有小节
+@bp.route('/api/chapters/<int:chapter_id>/sections', methods=['GET'])
+@login_required
+def get_sections(chapter_id):
+    chapter = Chapter.query.get_or_404(chapter_id)
+    sections = chapter.sections
+    return jsonify([section.to_dict() for section in sections])
+
+# 编辑课程
+@bp.route('/api/courses/<int:course_id>', methods=['PUT'])
+@login_required
+def edit_course(course_id):
+    course = Course.query.get_or_404(course_id)
+    data = request.get_json()
+    course.name = data['name']
+    course.description = data['description']
+    db.session.commit()
+    return jsonify(course.to_dict())
+
+# 删除课程
+@bp.route('/api/courses/<int:course_id>', methods=['DELETE'])
+@login_required
+def delete_course(course_id):
+    course = Course.query.get_or_404(course_id)
+    db.session.delete(course)
+    db.session.commit()
+    return jsonify({'message': 'Course deleted successfully'})
+
+# 编辑模块
+@bp.route('/api/modules/<int:module_id>', methods=['PUT'])
+@login_required
+def edit_module(module_id):
+    module = Module.query.get_or_404(module_id)
+    data = request.get_json()
+    module.name = data['name']
+    module.description = data['description']
+    db.session.commit()
+    return jsonify(module.to_dict())
+
+# 删除模块
+@bp.route('/api/modules/<int:module_id>', methods=['DELETE'])
+@login_required
+def delete_module(module_id):
+    module = Module.query.get_or_404(module_id)
+    db.session.delete(module)
+    db.session.commit()
+    return jsonify({'message': 'Module deleted successfully'})
+
+# 编辑章节
+@bp.route('/api/chapters/<int:chapter_id>', methods=['PUT'])
+@login_required
+def edit_chapter(chapter_id):
+    chapter = Chapter.query.get_or_404(chapter_id)
+    data = request.get_json()
+    chapter.name = data['name']
+    chapter.description = data['description']
+    db.session.commit()
+    return jsonify(chapter.to_dict())
+
+# 删除章节
+@bp.route('/api/chapters/<int:chapter_id>', methods=['DELETE'])
+@login_required
+def delete_chapter(chapter_id):
+    chapter = Chapter.query.get_or_404(chapter_id)
+    db.session.delete(chapter)
+    db.session.commit()
+    return jsonify({'message': 'Chapter deleted successfully'})
+
+# 编辑小节
+@bp.route('/api/sections/<int:section_id>', methods=['PUT'])
+@login_required
+def edit_section(section_id):
+    section = Section.query.get_or_404(section_id)
+    data = request.get_json()
+    section.name = data['name']
+    section.description = data['description']
+    db.session.commit()
+    return jsonify(section.to_dict())
+
+# 删除小节
+@bp.route('/api/sections/<int:section_id>', methods=['DELETE'])
+@login_required
+def delete_section(section_id):
+    section = Section.query.get_or_404(section_id)
+    db.session.delete(section)
+    db.session.commit()
+    return jsonify({'message': 'Section deleted successfully'})
+
+# 添加课程
+@bp.route('/api/courses', methods=['POST'])
+@login_required
+def add_course():
+    data = request.get_json()
+    new_course = Course(name=data['name'], description=data['description'], teacher_id=current_user.id)
+    db.session.add(new_course)
+    db.session.commit()
+    return jsonify(new_course.to_dict()), 201
+
+# 添加模块
+@bp.route('/api/modules', methods=['POST'])
+@login_required
+def add_module():
+    data = request.get_json()
+    new_module = Module(name=data['name'], description=data['description'], course_id=data['course_id'])
+    db.session.add(new_module)
+    db.session.commit()
+    return jsonify(new_module.to_dict()), 201
+
+# 添加章节
+@bp.route('/api/chapters', methods=['POST'])
+@login_required
+def add_chapter():
+    data = request.get_json()
+    new_chapter = Chapter(name=data['name'], description=data['description'], module_id=data['module_id'])
+    db.session.add(new_chapter)
+    db.session.commit()
+    return jsonify(new_chapter.to_dict()), 201
+
+# 添加小节
+@bp.route('/api/sections', methods=['POST'])
+@login_required
+def add_section():
+    data = request.get_json()
+    new_section = Section(name=data['name'], description=data['description'], chapter_id=data['chapter_id'])
+    db.session.add(new_section)
+    db.session.commit()
+    return jsonify(new_section.to_dict()), 201
+
+
+
+
 
 @bp.route('/course_management')
 @login_required
@@ -387,41 +541,6 @@ def course_management():
 
     return render_template('course_management.html', courses=courses)
 
-@bp.route('/edit_course/<int:course_id>', methods=['GET', 'POST'])
-@login_required
-def edit_course(course_id):
-    course = Course.query.get_or_404(course_id)
-
-    # 权限检查，确保管理员或课程的老师才能编辑
-    if current_user.role != 'admin' and current_user.id != course.teacher_id:
-        flash('没有权限编辑该课程', 'danger')
-        return redirect(url_for('main.course_management'))
-
-    if request.method == 'POST':
-        course.name = request.form['name']
-        course.description = request.form['description']
-        db.session.commit()
-
-        flash('课程已更新！', 'success')
-        return redirect(url_for('main.course_management'))
-
-    return render_template('edit_course.html', course=course)
-
-@bp.route('/delete_course/<int:course_id>', methods=['POST'])
-@login_required
-def delete_course(course_id):
-    course = Course.query.get_or_404(course_id)
-
-    # 权限检查，确保管理员或课程的老师才能删除
-    if current_user.role != 'admin' and current_user.id != course.teacher_id:
-        flash('没有权限删除该课程', 'danger')
-        return redirect(url_for('main.course_management'))
-
-    db.session.delete(course)
-    db.session.commit()
-
-    flash('课程已删除！', 'success')
-    return redirect(url_for('main.course_management'))
 
 #########模块管理页面
 @bp.route('/module_management/<int:course_id>', methods=['GET', 'POST'])

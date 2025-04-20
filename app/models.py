@@ -37,6 +37,14 @@ class Course(db.Model):
     # 用于记录学生的学习进度
     progress = db.relationship('Progress', back_populates='course')
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'teacher_id': self.teacher_id
+        }
+
     def __repr__(self):
         return f'<Course {self.name}>'
 
@@ -54,6 +62,14 @@ class Module(db.Model):
     course = db.relationship('Course', back_populates='modules')
     # 与 Chapter 的关联使用显式双向绑定
     chapters = db.relationship('Chapter', back_populates='module', lazy=True)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'course_id': self.course_id,
+            'description': self.description
+        }
 
     def __repr__(self):
         return f'<Module {self.name}>'
@@ -74,6 +90,13 @@ class Chapter(db.Model):
     # 每个章节有多个题目
     questions = db.relationship('Question', back_populates='chapter', lazy=True)
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'module_id': self.module_id,
+        }
+
     def __repr__(self):
         return f'<Chapter {self.name}>'
 
@@ -91,6 +114,13 @@ class Section(db.Model):
 
     # 显式设置与 Video 的双向关系
     videos = db.relationship('Video', back_populates='section', lazy=True)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'chapter_id': self.chapter_id,
+        }
 
     def __repr__(self):
         return f'<Section {self.name}>'
